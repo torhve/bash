@@ -4,12 +4,14 @@ lapis = require "lapis.init"
 csrf = require "lapis.csrf"
 html = require "lapis.html"
 cjson = require "cjson"
+config = require("lapis.config").get!
 
 import respond_to, capture_errors, assert_error, yield_error from require "lapis.application"
 import validate, assert_valid from require "lapis.validate"
 import escape_pattern, trim_filter from require "lapis.util"
 import split from require "moonscript.util"
-import Quote, Votes from require "models"
+import Quote, Votes, Tags, TagsPageRelation from require "models"
+import random from require "math"
 
 debug = (txt) ->
   txt = tostring txt
@@ -23,6 +25,13 @@ is404 = ->
 
 class extends lapis.Application
     layout: require "views.layout"
+
+    @before_filter =>
+      unless @session.anonid
+        -- Generate random anon id
+        @session.anonid = ngx.md5 tostring(random(65535))..ngx.var.remote_addr..config.secret
+      @anonid = @session.anonid 
+      @messages = {}
 
     [index: "/"]: =>
       @title = 'Welcome to bash.no'
@@ -40,11 +49,20 @@ class extends lapis.Application
         return is404!
       render: true
 
+    [random: "/random"]: =>
+      @paginator = Quote\paginated "where published = false order by random()", 10
+      render: 'quotes'
+
     [top: "/top"]: =>
       @title = 'Top quotes'
       --- FIXME publish order by votes
-      @quotes = Quote\select "where published = false"
-      render: true
+      @paginator = Quote\paginated [[
+        q 
+        LEFT JOIN votes 
+          ON votes.quote_id = q.id 
+        WHERE published = false 
+        GROUP BY q.id ]], per_page:10, fields:"q.*, SUM(amount)"
+      render: 'quotes'
 
     [new: "/new"]: respond_to {
       before: =>
@@ -70,12 +88,43 @@ class extends lapis.Application
         redirect_to: @url_for("quote", id: quote.id)
     }
 
+    [vote: "/vote/:qid/:direction"]: capture_errors =>
+      unless tonumber @params.qid
+        return is404!
+      @quote = Quote\find @params.qid
+      unless @quote
+        return is404!
+      dir = @params.direction
+      amount = 0
+      message = ''
+      switch dir
+        when 'up'
+          amount = 1
+          message = 'Ok. It has been hyped!'
+        when 'down' 
+          amount = -1
+          message = 'Ok. They shall have to try harder.'
+        when 'nuke'
+          amount = 0
+          message = 'Ok. Admins might react.'
+        else
+          return is404!
+      success, @vote = pcall -> Votes\create @quote.id, amount, @anonid, ngx.var.remote_addr
+      unless success
+        message = 'You have already inflincted the appropriate amount of power. Sorry.'
+
+      table.insert @messages, message
+      render:'quote'
+
+
     "/db/make": =>
-      schema = require "schema"
-      schema.make_schema!
-      json: { status: "ok" }
+      if @anonid == "e58cab5f47de5c723e9b97417e34091f"
+        schema = require "schema"
+        schema.make_schema!
+        json: { status: "ok" }
 
     "/db/nuke": =>
-      schema = require "schema"
-      schema.destroy_schema!
-      json: { status: "ok" }
+      if @anonid == "e58cab5f47de5c723e9b97417e34091f"
+        schema = require "schema"
+        schema.destroy_schema!
+        json: { status: "ok" }

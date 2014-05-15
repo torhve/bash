@@ -32,6 +32,7 @@ make_schema = ->
   create_table "votes", {
     {"id", serial}
     {"quote_id", foreign_key}
+    {"anonid", varchar}
     {"amount", integer}
     {"creator_ip", varchar}
     {"created_at", time}
@@ -41,10 +42,30 @@ make_schema = ->
   }
 
   create_index "votes", "quote_id"
+  create_index "votes", "quote_id", "anonid", unique: true
+
+  -- Tags
+  create_table "tags", {
+      {"id", serial}
+      {"name", varchar}
+
+      "PRIMARY KEY (id)"
+  }
+  create_index "tags", "name", unique: true
+
+  -- Tag membership
+  create_table "tags_page_relation", {
+      {"id", serial}
+      {"quote_id", foreign_key}
+      {"tags_id", foreign_key}
+
+      "PRIMARY KEY (id)"
+    }
+  create_index "tags_page_relation", "quote_id", "tags_id", unique: true
 
 destroy_schema = ->
     tbls = {
-        "quote", "votes"
+        "quote", "votes", "tags", "tags_page_relation"
     }
 
     for t in *tbls

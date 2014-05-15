@@ -30,16 +30,24 @@ class Base extends Widget
 
   render_quote: (quote) =>
     lines = colorize_nicks quote.content
+    votes = quote\votes! or 0
     small class:'created right', "Submitted #{quote.created_at}"
     div class:"actions", ->
       a class:'pure-button button-small', href:@url_for('quote', id:quote.id), ->
-        text "##{quote.id}"
+        text "# #{quote.id}"
       raw ' '
-      a class:'pure-button button-small', href:@url_for('quote', id:quote.id), ->
-        span " + "
+      a class:'pure-button button-small', href:@url_for('vote', qid:quote.id, direction:'up'), ->
+        span " + ", ->
+        if votes > 0
+          text "(#{votes})"
       raw ' '
-      a class:'pure-button button-small', href:@url_for('quote', id:quote.id), ->
+      a class:'pure-button button-small', href:@url_for('vote', qid:quote.id, direction:'down'), ->
         span " - "
+        if votes < 0
+          text "(#{votes})"
+      raw ' '
+      a class:'pure-button button-small', href:@url_for('vote', qid:quote.id, direction:'nuke'), ->
+        span " ☠ "
     div class:"quote", ->
       element 'table', ->
         for line in *lines
@@ -52,9 +60,25 @@ class Base extends Widget
             td -> 
               text line.text
 
+  paginate: (paginator) =>
+    ul class:'pure-paginator', ->
+      li ->
+        a class:'pure-button prev', href:'#', ->
+          text '1'
+        a class:'pure-button active', href:'#', ->
+          text '2'
+        a class:'pure-button next', href:'#', ->
+          text '3'
+
   render_errors: =>
-    if @errors
+    if @errors and #@errors
       div "Errors:"
-      ul ->
+      ul class: 'messages', ->
         for e in *@errors
-          li e
+          li class:'alert', e
+  render_messages: =>
+    if #@messages and #@messages>0
+      h5 "MESSAGES"
+      ul class:'messages', ->
+        for e in *@messages
+          li class:'success', e

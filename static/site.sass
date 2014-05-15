@@ -36,11 +36,13 @@ a
     text-transform: uppercase
     @include hborder
 .home-menu.pure-menu-open
+.home-menu.pure-menu-open
     background-color: $black
     top: 100px
 .home-menu.pure-menu-open a
     color: $white
 .home-menu.pure-menu-open a:hover
+    background-color: $white
     color: $black
 .home-menu ul
     float: right
@@ -76,17 +78,37 @@ textarea
     color: $white
 .actions a
     font-size: larger
-    font-weight: bold
+    font-weight: normal
     text-decoration: none
-    width: 15px
+    min-width: 16px
+    height: 16px
+    line-height: 16px
     background-color: $tertiary
     color: $white
 .quote
     padding: 40px
-    white-space: pre
     font-family: monospace
+    font-size: larger
+    white-space: pre-wrap        /* css-3 */
+    white-space: -moz-pre-wrap   /* Mozilla, since 1999 */
+    white-space: -pre-wrap       /* Opera 4-6 */
+    white-space: -o-pre-wrap     /* Opera 7 */
+    word-wrap: break-word        /* Internet Explorer 5.5+ */
 .prefix
     text-align: right
     padding-right: 5px
 .created
     font-style: italic
+.messages
+    list-style-type: none
+    padding: 0
+.alert
+    padding: 1em
+    background-color: $primary
+    color: $white
+    border-radius: 3px
+.success
+    padding: 1em
+    background-color: $tertiary
+    color: $white
+    border-radius: 3px

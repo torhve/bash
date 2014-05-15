@@ -1,6 +1,6 @@
-html = require 'lapis.html'
+import Widget from require "lapis.html"
 
-class DefaultLayout extends html.Widget
+class DefaultLayout extends Widget
   content: =>
     html_5 ->
       head ->
@@ -14,8 +14,7 @@ class DefaultLayout extends html.Widget
         link rel:"icon", type:"image/png", href:"/static/favicon.png"
 
         link rel: "stylesheet", href: "/static/site.css"
-        script type: "text/javascript", src: "/static/react.js"
-        script type: "text/javascript", src: "/static/JSXTransformer.js"
+        script type: "text/javascript", src: "/static/react.min.js"
       body ->
         div class:"header", ->
             text 'bash.no'
@@ -29,8 +28,6 @@ class DefaultLayout extends html.Widget
                 a href:"/top", "Top"
               li ->
                 a href:"/random", "Random"
-              li ->
-                a href:"/search", "Search"
               li ->
                 a href:"/new", "Submit"
 
