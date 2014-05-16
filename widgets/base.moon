@@ -15,6 +15,10 @@ colorize_nicks = (content) ->
   return out
 
 class Base extends Widget
+
+  faicon: (name) =>
+    raw '<i class="fa fa-'..name..'"></i>'
+
   term_snippet: (cmd) =>
     pre class: "highlight lang_bash term_snippet", ->
       code ->
@@ -34,20 +38,21 @@ class Base extends Widget
     small class:'created right', "Submitted #{quote.created_at}"
     div class:"actions", ->
       a class:'pure-button button-small', href:@url_for('quote', id:quote.id), ->
-        text "# #{quote.id}"
+        @faicon "chain"
+        text " #{quote.id}"
       raw ' '
       a class:'pure-button button-small', href:@url_for('vote', qid:quote.id, direction:'up'), ->
-        span " + ", ->
+        @faicon "thumbs-up", ->
         if votes > 0
-          text "(#{votes})"
+          text " (#{votes})"
       raw ' '
       a class:'pure-button button-small', href:@url_for('vote', qid:quote.id, direction:'down'), ->
-        span " - "
+        @faicon "thumbs-down", ->
         if votes < 0
-          text "(#{votes})"
+          text " (#{votes})"
       raw ' '
       a class:'pure-button button-small', href:@url_for('vote', qid:quote.id, direction:'nuke'), ->
-        span " ☠ "
+        @faicon "flag"
     div class:"quote", ->
       element 'table', ->
         for line in *lines
