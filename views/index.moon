@@ -17,10 +17,12 @@ class Index extends require "widgets.base"
       div class:"pure-u-1-2", -> 
         div class:"box", ->
           h3 "News"
+          strong "2014-05-17"
+          p "Tag navigation, tag pagination"
           strong "2014-05-16"
-          p "Day#3. Icons. Tags"
+          p " Icons. Tags"
           strong "2014-05-15"
-          p "Day#2. Voting, database ready for tags. Cofeescript for live preview. Pagination almost ready. Top, random working."
+          p "Voting, database ready for tags. Cofeescript for live preview. Pagination almost ready. Top, random working."
           strong "2014-05-14"
           p "Development starts as a fun little project :-)"
 
