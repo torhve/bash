@@ -6,7 +6,7 @@ class New extends require "widgets.base"
       h2 @title
       @render_errors!
 
-      div class:"pure-g", ->
+      div class:"pure-g-r", ->
         div class:"pure-u-1-2", ->
           text "Please use the text format as shown. Ex:"
           pre [[
@@ -21,7 +21,8 @@ class New extends require "widgets.base"
               div id:"tacontainer", ->
                 textarea name: "content", id: "content_field"
               label for: "tags_field", "Space separted list of tags. Ex. #lua"
-              input type: "text", name: "tags", id:"tags_field"
+              div id:"tagbox", ->
+                input type: "text", name: "tags", id:"tags_field"
             button type: "submit", class: "pure-button pure-button-primary", 'Submit quote'
         div class:"pure-u-1-2", ->
           p

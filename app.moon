@@ -50,13 +50,8 @@ class extends lapis.Application
       render: true
 
     [random: "/random"]: =>
-      @paginator = Quote\paginated "where published = false order by random()", 10
-      @pagenum = 1
-      if tonumber(@params.page) 
-        if tonumber(@params.page) > 1 or tonumber(@params.page) <= @paginator\num_pages!
-          @pagenum = tonumber(@params.page)
-      render: 'quotes'
-
+      @quotes = Quote\select "where published = false order by random() LIMIT 10"
+      render: true
 
     [top: "/top"]: =>
       @title = 'Top quotes'
@@ -178,6 +173,14 @@ class extends lapis.Application
         if #@titlematches == 1
           redirect_to: @url_for("wikipage", slug:@titlematches[1].slug)
         render: true
+
+    "/api/tags/": =>
+      search = ngx.unescape_uri @params.search
+      unless search
+        return is404!
+      -- TODO fast API
+      matches = Tags\select 'WHERE name like ? LIMIT 10', "%#{search}%"
+      json: [m.name for m in *matches]
 
 
     "/db/make": =>

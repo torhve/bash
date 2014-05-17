@@ -72,10 +72,11 @@ class Base extends Widget
         for line in *lines
           tr ->
             td class:"prefix", -> 
-              text "<"
-              span class:@ncolor(line.nick), ->
-                text line.nick
-              text ">"
+              unless line.nick == ''
+                text "<"
+                span class:@ncolor(line.nick), ->
+                  text line.nick
+                text ">"
             td -> 
               text line.text
       --- TODO JOIN
