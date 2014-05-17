@@ -48,7 +48,7 @@ class Base extends Widget
   render_quote: (quote) =>
     lines = colorize_nicks quote.content
     --- TODO join
-    votes = quote\votes! or 0
+    votes = quote.votesum or quote\votes! or 0
     div class: "quote", ->
       small class:'created right', "Submitted #{quote.created_at}"
       div class:"actions", ->

@@ -66,7 +66,8 @@ class extends lapis.Application
         LEFT JOIN votes 
           ON votes.quote_id = q.id 
         WHERE published = false 
-        GROUP BY q.id ]], per_page:10, fields:"q.*, SUM(amount)"
+        GROUP BY q.id
+        ORDER BY votesum DESC]], per_page:10, fields:"q.*, COALESCE(SUM(amount), 0) AS votesum"
       @pagenum = 1
       if tonumber(@params.page) 
         if tonumber(@params.page) > 1 or tonumber(@params.page) <= @paginator\num_pages!
@@ -140,14 +141,23 @@ class extends lapis.Application
     [tag: "/tag/:name"]: =>
         @tag = ngx.unescape_uri @params.name
         @title = "All quotes with tag"
-        @quotes = Quote\select [[
-            JOIN tags_page_relation as r
-                ON (quote.id = r.quote_id)
-            JOIN tags as t
-                ON (t.id = r.tags_id)
-        WHERE t.name = ?]], @tag, fields: 'quote.*'
-        unless next @quotes
-          return is404!
+        @paginator = Quote\paginated [[
+          JOIN tags_page_relation as r
+              ON (quote.id = r.quote_id)
+          JOIN tags as t
+              ON (t.id = r.tags_id)
+          LEFT JOIN votes 
+            ON votes.quote_id = quote.id 
+          WHERE 
+              published = false
+            AND 
+              t.name = ?
+          GROUP BY quote.id
+          ORDER BY votesum DESC]], @tag, per_page:10, fields:"quote.*, COALESCE(SUM(amount), 0) AS votesum"
+        @pagenum = 1
+        if tonumber(@params.page) 
+          if tonumber(@params.page) > 1 or tonumber(@params.page) <= @paginator\num_pages!
+            @pagenum = tonumber(@params.page)
         render: true
 
     [search: "/search"]: =>
