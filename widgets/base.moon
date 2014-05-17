@@ -5,7 +5,7 @@ colorize_nicks = (content) ->
   lines = split(content, '\n')
   out = {}
   for line in *lines
-    m, err = ngx.re.match(line, '\\s*<(.*?)>\\s*(.*)\\s*$')
+    m, err = ngx.re.match(line, '\\s*<[@&%+ ]?(.*?)>\\s*(.*)\\s*$')
     if m
       nick = m[1]
       text = m[2]
@@ -15,6 +15,16 @@ colorize_nicks = (content) ->
   return out
 
 class Base extends Widget
+
+  render_tags: (tags) =>
+    ul class: "tags", ->
+      for tag in *tags
+        name = ngx.escape_uri tag.name
+        li ->
+          a class:"tag", href:@url_for('tag', name: name), ->
+            -- @faicon "tag"
+            text tag.name
+
 
   faicon: (name) =>
     raw '<i class="fa fa-'..name..'"></i> '
@@ -36,25 +46,25 @@ class Base extends Widget
     lines = colorize_nicks quote.content
     --- TODO join
     votes = quote\votes! or 0
-    small class:'created right', "Submitted #{quote.created_at}"
-    div class:"actions", ->
-      a class:'pure-button button-small', href:@url_for('quote', id:quote.id), ->
-        @faicon "chain"
-        text " #{quote.id}"
-      raw ' '
-      a class:'pure-button button-small', href:@url_for('vote', qid:quote.id, direction:'up'), ->
-        @faicon "thumbs-up", ->
-        if votes > 0
-          text " (#{votes})"
-      raw ' '
-      a class:'pure-button button-small', href:@url_for('vote', qid:quote.id, direction:'down'), ->
-        @faicon "thumbs-down", ->
-        if votes < 0
-          text " (#{votes})"
-      raw ' '
-      a class:'pure-button button-small', href:@url_for('vote', qid:quote.id, direction:'nuke'), ->
-        @faicon "flag"
-    div class:"quote", ->
+    div class: "quote", ->
+      small class:'created right', "Submitted #{quote.created_at}"
+      div class:"actions", ->
+        a class:'pure-button button-small', href:@url_for('quote', id:quote.id), ->
+          @faicon "chain"
+          text " #{quote.id}"
+        raw ' '
+        a class:'pure-button button-small', href:@url_for('vote', qid:quote.id, direction:'up'), ->
+          @faicon "thumbs-up", ->
+          if votes > 0
+            text " (#{votes})"
+        raw ' '
+        a class:'pure-button button-small', href:@url_for('vote', qid:quote.id, direction:'down'), ->
+          @faicon "thumbs-down", ->
+          if votes < 0
+            text " (#{votes})"
+        raw ' '
+        a class:'pure-button button-small', href:@url_for('vote', qid:quote.id, direction:'nuke'), ->
+          @faicon "flag"
       element 'table', ->
         for line in *lines
           tr ->
@@ -65,12 +75,8 @@ class Base extends Widget
               text ">"
             td -> 
               text line.text
-    div class:"tags", ->
       --- TODO JOIN
-      for tag in *quote\tags!
-        span class:'tag', ->
-          @faicon "tag"
-          text tag.name
+      @render_tags quote\tags!
 
 
   paginate: (paginator) =>

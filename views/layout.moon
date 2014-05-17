@@ -15,16 +15,19 @@ class DefaultLayout extends Widget
         link rel:"shortcut icon", type:"image/png", href:"/static/favicon.png"
         link rel:"icon", type:"image/png", href:"/static/favicon.png"
 
-        link rel: "stylesheet", href: "/static/site.css"
+        link rel: "stylesheet", href: "/static/bash.css"
         link rel: "stylesheet", href: "//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"
         script type: "text/javascript", src: "/static/react.min.js"
       body ->
         div class:"header", ->
-          text ' bash.no'
+          text 'bash.no'
+          small 'BETA'
         div class:"menu", ->
           div class:"home-menu pure-menu pure-menu-open pure-menu-horizontal", ->
             a class:"pure-menu-heading", href:"/", ->
-              text " bash.no"
+              text "bash.no"
+                
+
             ul ->
               li class:"pure-menu-selected", ->
                 a href:"/", ->
@@ -38,6 +41,10 @@ class DefaultLayout extends Widget
                 a href:"/random", ->
                   i class:"fa fa-random"
                   text " Random"
+              li ->
+                a href:"/tags", ->
+                  i class:"fa fa-tags"
+                  text " Tags"
               li ->
                 a href:"/new", ->
                   i class:"fa fa-plus-square-o"

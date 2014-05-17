@@ -132,6 +132,43 @@ class extends lapis.Application
       table.insert @messages, message
       render:'quote'
 
+    [tags: "/tags"]: =>
+        @title = "All tags"
+        @tags = Tags\select "order by name asc"
+        render: true
+
+    [tag: "/tag/:name"]: =>
+        @tag = ngx.unescape_uri @params.name
+        @title = "All quotes with tag"
+        @quotes = Quote\select [[
+            JOIN tags_page_relation as r
+                ON (quote.id = r.quote_id)
+            JOIN tags as t
+                ON (t.id = r.tags_id)
+        WHERE t.name = ?]], @tag, fields: 'quote.*'
+        unless next @quotes
+          return is404!
+        render: true
+
+    [search: "/search"]: =>
+        assert_valid @params, {
+            { 'q', exists: true, min_length: 1, max_length: 75 }
+        }
+        {:q} = @params
+        @title = 'Search for ' .. q
+        @query = q
+        pq = q .. ':*'
+        --res = db.query "SELECT * FROM wiki_pages WHERE to_tsvector(slug) @@ to_tsquery(?)", q .. ':*'
+        --  select distinct on (wiki_page_id) r.* wiki_page_id from revisions r, wiki_pages w where r.wiki_page_id = w.id order by wiki_page_id, r.updated_at desc
+        @titlematches = db.select [[* from (select distinct on (r.wiki_page_id) r.*, w.id, w.slug from revisions r, wiki_pages w where r.wiki_page_id = w.id order by r.wiki_page_id, updated_at) as pages 
+            WHERE 
+                to_tsvector(slug) @@ to_tsquery(?) 
+            OR
+                to_tsvector(content) @@ to_tsquery(?)]], pq, pq
+        if #@titlematches == 1
+          redirect_to: @url_for("wikipage", slug:@titlematches[1].slug)
+        render: true
+
 
     "/db/make": =>
       if @anonid == "e58cab5f47de5c723e9b97417e34091f"

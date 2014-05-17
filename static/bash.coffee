@@ -15,7 +15,7 @@ parse_lines = (content) ->
   lines = content.split('\n')
   out = [] 
   for line in lines
-    m = line.match /\s*<(.*?)>\s*(.*)\s*$/
+    m = line.match /\s*<[&@+% ]?(.*?)>\s*(.*)\s*$/
     if m
         nick = m[1]
         text = m[2]
