@@ -85,6 +85,13 @@ class extends lapis.Application
         ip = ngx.var.remote_addr
         quote = assert_error Quote\create content, ip
 
+        tags = split @params.tags, ' '
+        for tagname in *tags
+          tag = Tags\find name: tagname
+          unless tag
+            tag = Tags\create tagname
+          relation = TagsPageRelation\create quote.id, tag.id
+
         redirect_to: @url_for("quote", id: quote.id)
     }
 

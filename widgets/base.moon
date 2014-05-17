@@ -17,7 +17,7 @@ colorize_nicks = (content) ->
 class Base extends Widget
 
   faicon: (name) =>
-    raw '<i class="fa fa-'..name..'"></i>'
+    raw '<i class="fa fa-'..name..'"></i> '
 
   term_snippet: (cmd) =>
     pre class: "highlight lang_bash term_snippet", ->
@@ -34,6 +34,7 @@ class Base extends Widget
 
   render_quote: (quote) =>
     lines = colorize_nicks quote.content
+    --- TODO join
     votes = quote\votes! or 0
     small class:'created right', "Submitted #{quote.created_at}"
     div class:"actions", ->
@@ -64,6 +65,13 @@ class Base extends Widget
               text ">"
             td -> 
               text line.text
+    div class:"tags", ->
+      --- TODO JOIN
+      for tag in *quote\tags!
+        span class:'tag', ->
+          @faicon "tag"
+          text tag.name
+
 
   paginate: (paginator) =>
     ul class:'pure-paginator', ->

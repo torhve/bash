@@ -18,6 +18,13 @@ class Quote extends Model
     res = Votes\select "where quote_id = ?", @id, fields: "SUM(amount)"
     return res[1].sum or 0
 
+  tags: =>
+    Tags\select [[
+      INNER JOIN tags_page_relation r
+        ON (tags.id = r.tags_id)
+        WHERE quote_id = ?
+      ]], @id
+
 
 class Votes extends Model
   @timestamp: true

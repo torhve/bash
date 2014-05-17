@@ -20,7 +20,9 @@ class New extends require "widgets.base"
               label for: "content_field", "Paste your quote in to the text area below"
               div id:"tacontainer", ->
                 textarea name: "content", id: "content_field"
-              button type: "submit", class: "pure-button pure-button-primary", 'Submit quote'
+              label for: "tags_field", "Space separted list of tags. Ex. #lua"
+              input type: "text", name: "tags", id:"tags_field"
+            button type: "submit", class: "pure-button pure-button-primary", 'Submit quote'
         div class:"pure-u-1-2", ->
           p
           pre [[
