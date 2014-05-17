@@ -74,14 +74,25 @@ class Base extends Widget
 
 
   paginate: (paginator) =>
+    pages = @paginator\num_pages!
+    link = (n) ->
+      if n < 1 then n = 1
+      if n > pages then n = pages
+      '?page='..n
     ul class:'pure-paginator', ->
       li ->
-        a class:'pure-button prev', href:'#', ->
-          text '1'
-        a class:'pure-button active', href:'#', ->
-          text '2'
-        a class:'pure-button next', href:'#', ->
-          text '3'
+        a class:'pure-button prev', href:link(@pagenum-1), ->
+          raw "&#171;"
+      for i=1, pages
+        if @pagenum == i
+          a class:'pure-button active', href:link(i), ->
+            text i
+        else
+          a class:'pure-button', href:link(i), ->
+            text i
+      li ->
+        a class:'pure-button next', href:link(@pagenum+1), ->
+          raw "&#187;"
 
   render_errors: =>
     if @errors and #@errors

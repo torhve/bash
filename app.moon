@@ -51,7 +51,12 @@ class extends lapis.Application
 
     [random: "/random"]: =>
       @paginator = Quote\paginated "where published = false order by random()", 10
+      @pagenum = 1
+      if tonumber(@params.page) 
+        if tonumber(@params.page) > 1 or tonumber(@params.page) <= @paginator\num_pages!
+          @pagenum = tonumber(@params.page)
       render: 'quotes'
+
 
     [top: "/top"]: =>
       @title = 'Top quotes'
@@ -62,6 +67,10 @@ class extends lapis.Application
           ON votes.quote_id = q.id 
         WHERE published = false 
         GROUP BY q.id ]], per_page:10, fields:"q.*, SUM(amount)"
+      @pagenum = 1
+      if tonumber(@params.page) 
+        if tonumber(@params.page) > 1 or tonumber(@params.page) <= @paginator\num_pages!
+          @pagenum = tonumber(@params.page)
       render: 'quotes'
 
     [new: "/new"]: respond_to {
