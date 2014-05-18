@@ -69,6 +69,22 @@ class extends lapis.Application
           @pagenum = tonumber(@params.page)
       render: 'quotes'
 
+    [recent: "/recent"]: =>
+      @title = 'Recent quotes'
+      --- FIXME publish order by votes
+      @paginator = Quote\paginated [[
+        q 
+        LEFT JOIN votes 
+          ON votes.quote_id = q.id 
+        WHERE published = false 
+        GROUP BY q.id
+        ORDER BY created_at DESC, votesum DESC]], per_page:10, fields:"q.*, COALESCE(SUM(amount), 0) AS votesum"
+      @pagenum = 1
+      if tonumber(@params.page) 
+        if tonumber(@params.page) > 1 or tonumber(@params.page) <= @paginator\num_pages!
+          @pagenum = tonumber(@params.page)
+      render: 'quotes'
+
     [new: "/new"]: respond_to {
       before: =>
         @title = "Submit quote"
