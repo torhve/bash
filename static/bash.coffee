@@ -33,9 +33,11 @@ colors =  [ 22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44
 ncolor = (nick) ->
     unless nick
         return ''
+    if nick is undefined
+        return ''
     color = 0
     for char in nick
-      color += String.charCodeAt(char)
+      color += char.charCodeAt(0)
     color = color % colors.length
     return "cef-"+colors[color]
 
@@ -68,11 +70,16 @@ quote = createClass
         (table {}, [@props.lines.map quoteLine])
 
 coloredNick = createClass
-    render: -> (div {}, [
-        (span {}, '<'),
-        (span {className:ncolor(@props.nick)}, @props.nick),
-        (span {}, '>')
-    ])
+    render: ->
+        unless @props.nick is ''
+            (div {}, [
+                (span {}, '<'),
+                (span {className:ncolor(@props.nick)}, @props.nick),
+                (span {}, '>')
+            ])
+        else
+            (div {})
+
 
 quoteLine = createClass
     render: ->

@@ -17,7 +17,7 @@ class DefaultLayout extends Widget
 
         link rel: "stylesheet", href: "/static/bash.css"
         link rel: "stylesheet", href: "//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"
-        script type: "text/javascript", src: "/static/react.min.js"
+        script type: "text/javascript", src: "/static/react.js"
       body ->
         div class:"header", ->
           text 'bash.no'
