@@ -1,7 +1,4 @@
 
-@import "pure-min.css"
-@import "termcolor.css"
-
 
 $primary: #541c24
 $secondary: #1f2d5c
@@ -10,6 +7,7 @@ $tertiary: #21634c
 $black: #111
 $white: #eee
 $background: #282828
+$mediawith: 968px
 
 @mixin hborder()
     -webkit-box-shadow: rgba(255, 255, 255, 0.07) 0 1px 0
@@ -63,6 +61,10 @@ hr
     float: right
 .pure-menu.pure-menu-open.pure-menu-fixed
     @include hborder
+.pure-button
+    border: 1px solid #121212
+    border-radius: 2px
+    box-shadow: #121212 1px 1px 1px
 .pure-button-primary
     background-color: $secondary
 .footer
@@ -198,7 +200,7 @@ textarea
         &:before
             border-color: transparent #555 transparent transparent
 // Media queries
-@media (max-width: 968px)
+@media (max-width: $mediawith)
     .quote
         padding: 0
     .content

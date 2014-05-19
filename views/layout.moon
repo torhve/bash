@@ -15,8 +15,10 @@ class DefaultLayout extends Widget
         link rel:"shortcut icon", type:"image/png", href:"/static/favicon.png"
         link rel:"icon", type:"image/png", href:"/static/favicon.png"
 
-        link rel: "stylesheet", href: "/static/bash.css"
         link rel: "stylesheet", href: "//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"
+        link rel: "stylesheet", href: "/static/pure-min.css"
+        link rel: "stylesheet", href: "/static/termcolor.css"
+        link rel: "stylesheet", href: "/static/bash.css"
         script type: "text/javascript", src: "/static/react.js"
       body ->
         div class:"header", ->
@@ -26,7 +28,7 @@ class DefaultLayout extends Widget
           div class:"home-menu pure-menu pure-menu-open pure-menu-horizontal", ->
             a class:"pure-menu-heading", href:"/", ->
               text "bash.no"
-                
+
 
             ul ->
               li class:"pure-menu-selected", ->
