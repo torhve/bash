@@ -22,7 +22,7 @@ class DefaultLayout extends Widget
         script type: "text/javascript", src: "/static/react.js"
       body ->
         div class:"header", ->
-          text 'bash.no'
+          span class:'logo', 'bash.no'
           small 'BETA'
         div class:"menu", ->
           div class:"home-menu pure-menu pure-menu-open pure-menu-horizontal", ->
