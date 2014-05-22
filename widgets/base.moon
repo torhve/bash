@@ -50,7 +50,8 @@ class Base extends Widget
     --- TODO join
     votes = quote.votesum or quote\votes! or 0
     div class: "quote", ->
-      small class:'created right', "Submitted #{quote.created_at}"
+      a class:'right', href:@url_for('quote', id:quote.id), ->
+        small class:'created right', "Submitted #{quote.created_at}"
       div class:"actions", ->
         a class:'pure-button button-small', href:@url_for('quote', id:quote.id), ->
           @faicon "chain"
