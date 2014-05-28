@@ -17,6 +17,8 @@ class Index extends require "widgets.base"
       div class:"pure-u-1-2", -> 
         div class:"box", ->
           h3 "News"
+          strong "2014-05-28"
+          p "Added title to quote page"
           strong "2014-05-17"
           p "Tag navigation, tag pagination"
           strong "2014-05-16"

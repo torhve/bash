@@ -41,12 +41,12 @@ class extends lapis.Application
       render: true
 
     [quote: "/quote/:id"]: =>
-      @title = ''
       unless tonumber @params.id
         return is404!
       @quote = Quote\find @params.id
       unless @quote
         return is404!
+      @title = @quote\text_version!
       render: true
 
     [random: "/random"]: =>
