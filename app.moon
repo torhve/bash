@@ -55,7 +55,7 @@ class extends lapis.Application
 
     [top: "/top"]: =>
       @title = 'Top quotes'
-      --- FIXME publish order by votes
+      --- FIXME publish
       @paginator = Quote\paginated [[
         q 
         LEFT JOIN votes 
@@ -71,7 +71,7 @@ class extends lapis.Application
 
     [recent: "/recent"]: =>
       @title = 'Recent quotes'
-      --- FIXME publish order by votes
+      --- FIXME publish
       @paginator = Quote\paginated [[
         q 
         LEFT JOIN votes 
