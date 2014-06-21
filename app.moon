@@ -92,7 +92,6 @@ class extends lapis.Application
 
       GET: =>
         @csrf_token = csrf.generate_token @
-        debug @csrf_token
         render: true
 
       POST: capture_errors =>
@@ -152,7 +151,7 @@ class extends lapis.Application
     [tag: "/tag/:name"]: =>
         @tag = ngx.unescape_uri @params.name
         @title = "All quotes with tag"
-        @paginator = Quote\paginated [[
+        clauses = [[
           JOIN tags_page_relation as r
               ON (quote.id = r.quote_id)
           JOIN tags as t
@@ -164,7 +163,12 @@ class extends lapis.Application
             AND 
               t.name = ?
           GROUP BY quote.id
+        ]]
+        @paginator = Quote\paginated clauses .. [[
           ORDER BY votesum DESC]], @tag, per_page:10, fields:"quote.*, COALESCE(SUM(amount), 0) AS votesum"
+        -- Since lapis does not support parsing JOIN clauses (yet?), calculate total items manually
+        @paginator._count = (Quote\select clauses, @tag, fields: "count(*)")[1].count
+
         @pagenum = 1
         if tonumber(@params.page) 
           if tonumber(@params.page) > 1 or tonumber(@params.page) <= @paginator\num_pages!
