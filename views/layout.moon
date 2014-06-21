@@ -40,6 +40,10 @@ class DefaultLayout extends Widget
                   i class:"fa fa-star"
                   text " Top"
               li ->
+                a href:"/recent", ->
+                  i class:"fa fa-clock-o"
+                  text " Latest"
+              li ->
                 a href:"/random", ->
                   i class:"fa fa-random"
                   text " Random"
