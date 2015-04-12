@@ -104,11 +104,11 @@ renderComponent quoteTextArea(), document.getElementById 'tacontainer'
 
 Tag = createClass
     render: ->
-        a {className:'tag', href:'#'}, @props.name
+        a {className:'tag', href:'#', onClick:@props.onClick}, @props.name
 
 TagList = createClass
     render: ->
-        ul {className:'tags'}, [Tag {name:n} for n in @props.autocomplete]
+        ul {className:'tags'}, [Tag {name:n, onClick:@props.onClick} for n in @props.autocomplete]
 
 
 TagBox = createClass
@@ -141,21 +141,15 @@ TagBox = createClass
             return false
         return true
 
+    handleClick: (e, d) ->
+        console.log(this, e, d, @)
+
     render: ->
         if @state.call.latest > 0 and @state.call.term != ''
             @makeCall @state.call.term, @state.call.latest
         div {},
-            TagList autocomplete:@state.autocomplete
+            TagList autocomplete:@state.autocomplete, onClick:@handleClick
             input ref: 'tagbox', type:'text', id: 'tags_field', name:'tags', onKeyUp:@handleKeyUp, onKeyPress:@handleKeyPress
 
 
 renderComponent TagBox(), document.getElementById 'tagbox'
-
-
-
-
-
-
-
-
-
