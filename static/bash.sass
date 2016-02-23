@@ -1,12 +1,13 @@
 
 
-$primary: #541c24
-$secondary: #1f2d5c
+$primary: #2b90b9
+$secondary: #d9e1e8
+//$secondary: #1f2d5c
 $secondary: #445183
 $tertiary: #21634c
-$black: #111
+$black: #34314c
 $white: #eee
-$background: #282828
+$background: #282c37
 $mediawith: 968px
 
 @mixin hborder()
@@ -17,16 +18,16 @@ $mediawith: 968px
 
 html, button, input, select, textarea,
     .pure-g [class *= "pure-u"],
-    .pure-g-r [class *= "pure-u"] 
+    .pure-g-r [class *= "pure-u"]
     font-family: "Helvetica Neue", "Helvetica",  sans-serif
 
 html
     width: 100%
 body
     background-color: $background
-    color: #DDD
+    color: $white
     width: 100%
-a 
+a
     color: $tertiary
 hr
     @include hborder
