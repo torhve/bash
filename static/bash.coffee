@@ -36,7 +36,7 @@ ncolor = (nick) ->
 
 parse_lines = (content) ->
   lines = content.trim().split('\n')
-  out = [] 
+  out = []
   for line in lines
     m = line.match /\s*<[&@+% ]?(.*?)>\s*(.*)\s*$/
     if m
@@ -53,7 +53,7 @@ parse_lines = (content) ->
 build_tag = (tag) ->
   (options...) ->
     unless typeof(options[0]) is 'object'
-        options.unshift {} 
+        options.unshift {}
     React.DOM[tag].apply @, options
 
 DOM = (->
@@ -69,7 +69,7 @@ quoteTextArea = createClass
     getInitialState: ->
         value: ''
 
-    render: -> 
+    render: ->
         textarea { ref: 'textarea', onKeyUp: @handleKeyUp, name: 'content', id: 'content_field' }, @state.value
 
     handleKeyUp: ->
@@ -118,7 +118,7 @@ TagBox = createClass
     makeCall: (term, current) ->
         apiurl = "/api/tags/?search=#{encodeURIComponent(term)}"
         getJSON {url:apiurl}, ((data) ->
-            if (current is @state.call.latest) 
+            if (current is @state.call.latest)
                 newPriority = @state.call.latest - 1
                 if data is {} then data = []
                 @setState({autocomplete: data, call: {latest: newPriority, term:''} })
